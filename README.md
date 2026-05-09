@@ -4,6 +4,21 @@
 
 The "RPC" lives on the toolbar. The whole thing is one panel page.
 
+## Install — no Node required
+
+Just want to use RPC, not build it?
+
+1. Grab the latest zip from [**Releases**](https://github.com/akintola4/responsive-point-check/releases/latest) → download `responsive-point-check-<version>-chrome.zip`.
+2. Unzip it anywhere on your machine.
+3. Open `chrome://extensions`, toggle **Developer mode** (top-right), then click **Load unpacked** and pick the unzipped folder.
+4. Pin the **RPC** icon from the puzzle menu so it's always one click away.
+
+Open any tab → click **RPC** → the panel opens in a new tab pre-filled with that page's URL. That's it.
+
+> Updates aren't automatic — when a new release lands, download the new zip and click **Update** on the extension card in `chrome://extensions`.
+
+---
+
 ## What you get
 
 - **One device at a time, properly framed.** Every viewport renders inside a real iPhone / iPad / MacBook Air / iMac SVG, not a CSS rectangle. Bezels are bundled (no external CDN, works offline).
@@ -15,7 +30,9 @@ The "RPC" lives on the toolbar. The whole thing is one panel page.
 - **Breakpoint guides.** Toggle vertical guides at 640 / 768 / 1024 / 1280; they live inside the frame so they pan and zoom with the device, and skip themselves when the viewport is narrower than the breakpoint.
 - **Auto-strips X-Frame-Options + CSP** for sub-frames initiated by the panel only — your normal browsing isn't touched.
 
-## Setup
+## Setup (for development)
+
+> Skip this section if you just want to install RPC — see [Install — no Node required](#install--no-node-required) above.
 
 ### 1. Install
 
