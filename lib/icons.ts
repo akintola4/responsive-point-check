@@ -64,6 +64,16 @@ export const grid = wrap(
   '<rect x="2.5" y="2.5" width="4" height="4"/><rect x="9.5" y="2.5" width="4" height="4"/><rect x="2.5" y="9.5" width="4" height="4"/><rect x="9.5" y="9.5" width="4" height="4"/>'
 );
 
+// Brand mark — three nested rounded device viewports (laptop > tablet > phone).
+// Rendered with currentColor so it adapts to the theme. Custom 20px viewport
+// to give the nested shapes more room than the 16x16 utility-icon grid.
+export const brand = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round">
+  <rect x="2" y="6" width="16" height="9" rx="1.5"/>
+  <rect x="6" y="3" width="8" height="14" rx="1.4" fill="var(--bg-elev,#fff)"/>
+  <rect x="8.5" y="6" width="3" height="6.5" rx="0.6"/>
+  <line x1="9.5" y1="7.2" x2="10.5" y2="7.2" stroke-width="0.8"/>
+</svg>`;
+
 // Sync — two opposing arcs forming a loop. Used for "sync scroll".
 export const sync = wrap(
   '<path d="M3 6.5a4 4 0 0 1 7-2L12 6M12 3v3h-3"/><path d="M13 9.5a4 4 0 0 1-7 2L4 10M4 13v-3h3"/>'

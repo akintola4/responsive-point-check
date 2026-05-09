@@ -150,6 +150,8 @@ input::placeholder { color: var(--fg-muted); opacity: 0.85; }
   margin-right: 4px;
 }
 .tb__brand span { display: inline-flex; color: var(--fg); }
+.tb__brand-mark { line-height: 0; }
+.tb__brand-mark svg { display: block; }
 .tb__url-wrap {
   flex: 1;
   display: flex;

@@ -65,7 +65,7 @@ export function createToolbar(): HTMLElement {
     h(
       'div',
       { class: 'tb__brand' },
-      h('span', { html: icons.grid }),
+      h('span', { class: 'tb__brand-mark', html: icons.brand }),
       'RPC'
     ),
     h(

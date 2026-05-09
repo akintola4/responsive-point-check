@@ -11,6 +11,25 @@ The latest downloadable build is always on the
 
 Nothing yet.
 
+## [0.1.1] — 2026-05-09
+
+### Added
+
+- **Logo + extension icons.** Brand mark is the "stacked viewports"
+  shape (laptop ▷ tablet ▷ phone, nested). Master at `public/icon.svg`,
+  PNGs at 16 / 32 / 48 / 128 in `public/icon/`, generated via
+  `pnpm icons` (Playwright-based — no system rasterizer required).
+  Wired into `manifest.icons`, `action.default_icon`, the panel
+  `<link rel="icon">`, and the toolbar brand mark.
+
+### Fixed
+
+- Dropped the iframe `sandbox="allow-scripts allow-same-origin ..."`
+  attribute. Chrome warned it was a no-op (a script inside the frame
+  could rewrite the attribute), and our trust model is to render the
+  user's chosen URL as a normal browsing context. Behaviorally
+  unchanged, just clears the warning.
+
 ## [0.1.0] — 2026-05-09
 
 First public release.
@@ -75,5 +94,6 @@ First public release.
   `noUncheckedIndexedAccess`, `noImplicitOverride`). No `any`.
 - Total bundle ~470 KB including bezels and Geist font files.
 
-[Unreleased]: https://github.com/akintola4/responsive-point-check/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/akintola4/responsive-point-check/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/akintola4/responsive-point-check/releases/tag/v0.1.1
 [0.1.0]: https://github.com/akintola4/responsive-point-check/releases/tag/v0.1.0

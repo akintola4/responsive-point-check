@@ -1,6 +1,6 @@
 {
   "name": "res-point-check",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Chrome extension to preview any URL across multiple device viewports",
   "type": "module",
@@ -10,6 +10,7 @@
     "zip": "wxt zip",
     "compile": "tsc --noEmit",
     "screenshot": "wxt build && tsx scripts/screenshot-devices.ts",
+    "icons": "tsx scripts/generate-icons.ts",
     "postinstall": "wxt prepare && node scripts/extract-geist-assets.mjs"
   },
   "dependencies": {

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>RPC — option 1: stacked viewports</title>
+  <!-- Black rounded-square background. -->
+  <rect width="256" height="256" rx="56" fill="#0a0a0a"/>
+  <!-- Outer device (laptop): wide rounded rect. -->
+  <rect x="36" y="68" width="184" height="120" rx="14"
+        fill="none" stroke="#ffffff" stroke-width="10"/>
+  <!-- Middle device (tablet): portrait rounded rect, centred over the laptop. -->
+  <rect x="80" y="44" width="96" height="168" rx="14"
+        fill="#0a0a0a" stroke="#ffffff" stroke-width="10"/>
+  <!-- Inner device (phone): smaller portrait rounded rect, centred. -->
+  <rect x="106" y="84" width="44" height="88" rx="10"
+        fill="#0a0a0a" stroke="#ffffff" stroke-width="8"/>
+  <!-- Phone screen "dot" / dynamic island accent. -->
+  <rect x="118" y="94" width="20" height="6" rx="3" fill="#ffffff"/>
+</svg>
