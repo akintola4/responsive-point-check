@@ -11,13 +11,11 @@ import { enableBackdropClickToClose } from './device-picker';
 import { h } from './h';
 import * as icons from '../../lib/icons';
 
-/** Set this to the public repo URL once it exists. While `null`, the
- *  Open-source section is hidden so users don't click 404s. */
-const GITHUB_REPO: string | null = null;
+/** Public repo URL — bug reports + feature requests open prefilled
+ *  GitHub issues against this repo. */
+const GITHUB_REPO = 'https://github.com/akintola4/responsive-point-check';
 const ISSUES_NEW = (label: string, title: string) =>
-  GITHUB_REPO
-    ? `${GITHUB_REPO}/issues/new?labels=${encodeURIComponent(label)}&title=${encodeURIComponent(title)}`
-    : '#';
+  `${GITHUB_REPO}/issues/new?labels=${encodeURIComponent(label)}&title=${encodeURIComponent(title)}`;
 
 let dialog: HTMLDialogElement | null = null;
 
@@ -46,33 +44,29 @@ function buildDialog(): HTMLDialogElement {
       'div',
       { class: 'hp__body' },
       buildFaqSection(),
-      ...(GITHUB_REPO
-        ? [
-            h(
-              'section',
-              { class: 'hp__section' },
-              h('h3', { class: 'st__heading' }, 'Open source'),
-              actionRow(
-                icons.alert,
-                'Report a bug',
-                'Open an issue on GitHub — RPC is open source.',
-                ISSUES_NEW('bug', '[bug] ')
-              ),
-              actionRow(
-                icons.plus,
-                'Suggest an improvement',
-                'Propose a feature or change.',
-                ISSUES_NEW('enhancement', '[feature] ')
-              ),
-              actionRow(
-                icons.share,
-                'View source on GitHub',
-                'Browse the repo, star, or fork.',
-                GITHUB_REPO
-              )
-            ),
-          ]
-        : [])
+      h(
+        'section',
+        { class: 'hp__section' },
+        h('h3', { class: 'st__heading' }, 'Open source'),
+        actionRow(
+          icons.alert,
+          'Report a bug',
+          'Open a prefilled issue on GitHub — uses the "bug" label.',
+          ISSUES_NEW('bug', '[bug] ')
+        ),
+        actionRow(
+          icons.plus,
+          'Suggest an improvement',
+          'Propose a feature or change — uses the "enhancement" label.',
+          ISSUES_NEW('enhancement', '[feature] ')
+        ),
+        actionRow(
+          icons.share,
+          'View source on GitHub',
+          'Browse the repo, star, or fork.',
+          GITHUB_REPO
+        )
+      )
     )
   ) as HTMLDialogElement;
 
@@ -134,9 +128,7 @@ function buildFaqSection(): HTMLElement {
     { class: 'hp__section' },
     h('h3', { class: 'st__heading' }, 'Frequently asked'),
     ...items,
-    ...(GITHUB_REPO
-      ? [link(`${GITHUB_REPO}#readme`, 'See all FAQs in the README →')]
-      : [])
+    link(`${GITHUB_REPO}#readme`, 'See all FAQs in the README →')
   );
 
   section.addEventListener(

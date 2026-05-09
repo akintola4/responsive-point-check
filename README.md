@@ -25,18 +25,27 @@ pnpm install
 
 The `postinstall` script extracts Geist + Geist Pixel font assets out of the `geist` npm package into `public/fonts/`. They're gitignored (regenerated on every install).
 
-### 2. Run in dev
+### 2. Build + load unpacked (everyday use)
+
+```bash
+pnpm build
+```
+
+Then in Chrome:
+
+1. `chrome://extensions`
+2. Toggle **Developer mode** (top-right)
+3. **Load unpacked** → point at `dist/chrome-mv3/`
+
+The build is fully self-contained — drag `dist/chrome-mv3/` straight into the Load unpacked dialog and you're done. No Node process needs to stay running while you use the extension.
+
+### 2b. Hot-reload dev server (only when editing source)
 
 ```bash
 pnpm dev
 ```
 
-WXT prints the unpacked path and opens Chrome with the extension auto-loaded. The panel page is hot-reloaded on every save; the service worker reloads on a manifest change.
-
-If Chrome doesn't auto-open, or you want to load the build into a different profile:
-
-1. `pnpm build` → produces `.output/chrome-mv3/`
-2. `chrome://extensions` → **Developer mode** → **Load unpacked** → point at `.output/chrome-mv3/`
+WXT prints the unpacked path and opens Chrome with the extension auto-loaded. The panel page is hot-reloaded on every save; the service worker reloads on a manifest change. Use this when you're actively editing — otherwise prefer the static build above.
 
 ### 3. Open the panel
 
