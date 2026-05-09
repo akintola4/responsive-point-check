@@ -5,7 +5,7 @@
  * focused assertion per fix, prints PASS / FAIL with a short reason.
  *
  * Usage:
- *   pnpm build               # produce .output/chrome-mv3
+ *   pnpm build               # produce dist/chrome-mv3
  *   pnpm tsx scripts/test-fixes.ts
  *
  * Each test is independent — a failure in one doesn't block the rest.
@@ -20,7 +20,7 @@ import { existsSync } from 'node:fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, '..');
-const EXTENSION_PATH = resolve(ROOT, '.output/chrome-mv3');
+const EXTENSION_PATH = resolve(ROOT, 'dist/chrome-mv3');
 const STATE_KEY = 'rpc.state.v2';
 
 interface TestResult {

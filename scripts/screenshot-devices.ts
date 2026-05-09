@@ -24,7 +24,7 @@ import { DEVICES } from '../lib/devices';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, '..');
-const EXTENSION_PATH = resolve(ROOT, '.output/chrome-mv3');
+const EXTENSION_PATH = resolve(ROOT, 'dist/chrome-mv3');
 const OUTPUT_DIR = resolve(ROOT, 'screenshots');
 const TARGET_URL = process.env.RPC_URL ?? 'https://go.dev';
 const STATE_KEY = 'rpc.state.v2';

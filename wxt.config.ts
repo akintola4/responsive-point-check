@@ -1,6 +1,10 @@
 import { defineConfig } from 'wxt';
 
 export default defineConfig({
+  // Output to `dist/` instead of WXT's default `.output/` so the build
+  // folder isn't hidden in macOS file dialogs (`.`-prefixed entries are
+  // hidden by default in the Load-unpacked picker).
+  outDir: 'dist',
   manifest: {
     name: 'RPC',
     short_name: 'RPC',
