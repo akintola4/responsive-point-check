@@ -847,7 +847,7 @@ input::placeholder { color: var(--fg-muted); opacity: 0.85; }
    Settings dialog (reuses .dp base, extends with rows)
    ========================================================================== */
 .st__body {
-  padding: 4px 0 16px;
+  padding: 16px 0;
   overflow-y: auto;
   max-height: 70vh;
 }
@@ -934,7 +934,7 @@ input::placeholder { color: var(--fg-muted); opacity: 0.85; }
   background: var(--fg);
   color: var(--bg);
 }
-.hp__body { padding: 8px 0 16px; max-height: 70vh; overflow-y: auto; }
+.hp__body { padding: 16px 0; max-height: 70vh; overflow-y: auto; }
 .hp__section { padding: 8px 20px; }
 .hp__section + .hp__section { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 16px; }
 .hp__faq {
@@ -1143,11 +1143,17 @@ body[data-show-guides='yes'] .frame__guides { display: block; }
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 0 24px 8px;
+  padding: 16px 24px 14px;
   flex-wrap: wrap;
   min-height: 32px;
 }
 .dp__recents:empty { display: none; }
+.dp__recents:not(:empty) + .dp__tabs {
+  /* Recents row already supplied bottom breathing room — pull the tabs
+     a touch closer so the header → recents → tabs cascade reads as one
+     stack instead of three separate strips. */
+  padding-top: 8px;
+}
 .dp__recents-label {
   font-family: var(--font-pixel);
   font-size: 10px;
