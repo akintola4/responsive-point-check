@@ -15,7 +15,22 @@ Just want to use RPC, not build it?
 
 Open any tab → click **RPC** → the panel opens in a new tab pre-filled with that page's URL. That's it.
 
-> Updates aren't automatic — when a new release lands, download the new zip and click **Update** on the extension card in `chrome://extensions`.
+> Updates aren't automatic — when a new release lands, download the new zip and click **Update** on the extension card in `chrome://extensions`. The full version history lives in [CHANGELOG.md](./CHANGELOG.md).
+
+## Supported browsers
+
+| Browser           | Status     | Notes                                                         |
+| ----------------- | ---------- | ------------------------------------------------------------- |
+| **Chrome** 88+    | ✅ Tested  | Primary target. Everything described in the README works.     |
+| **Edge** 88+      | ✅ Works   | Chromium-based, MV3 + `declarativeNetRequest` parity.         |
+| **Brave** 1.34+   | ✅ Works   | Chromium-based. Brave Shields may extra-block some embeds.    |
+| **Opera** 74+     | ✅ Works   | Chromium-based.                                               |
+| **Arc**           | ✅ Works   | Chromium-based. Same Load-unpacked flow.                      |
+| **Vivaldi** 4.4+  | ✅ Works   | Chromium-based.                                               |
+| **Firefox**       | ⚠️ Untested | Firefox MV3 lacks full `declarativeNetRequest` parity. Header stripping likely won't fire — sites with `X-Frame-Options: DENY` won't load. WXT can target Firefox in theory; not yet wired here. |
+| **Safari**        | ❌ Not supported | Safari Web Extensions use a different extension model + native Xcode wrapper.                                          |
+
+If you've got it working on a browser not listed, [open an issue](https://github.com/akintola4/responsive-point-check/issues/new?labels=enhancement&title=%5Bcompat%5D%20) so we can add it to the table.
 
 ---
 
