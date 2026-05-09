@@ -43,10 +43,17 @@ export function createFrame(
   const chromeBottomHost = h('div', { class: 'frame__chrome-host frame__chrome-host--bottom' });
   const guidesHost = h('div', { class: 'frame__guides' });
 
+  // No `sandbox` attribute: the previewed page needs to behave like a
+  // normal tab — scripts, cookies, redirects, postMessage. Setting
+  // `sandbox="allow-scripts allow-same-origin ..."` would log a Chrome
+  // warning ("can escape its sandboxing") because a script inside the
+  // frame can rewrite the sandbox attribute, defeating the protection.
+  // Our trust model is: the user explicitly typed this URL → render it
+  // unsandboxed and let the dNR rule + content-script bridge do their
+  // job. Other extensions targeting `<all_urls>` are still subject to
+  // their own permission policies.
   const iframe = h('iframe', {
     title: device.name,
-    sandbox:
-      'allow-scripts allow-same-origin allow-forms allow-popups allow-modals',
     referrerpolicy: 'no-referrer-when-downgrade',
   }) as HTMLIFrameElement;
 
