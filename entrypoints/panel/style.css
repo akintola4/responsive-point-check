@@ -1,0 +1,1280 @@
+/* ==========================================================================
+   Geist fonts
+   ========================================================================== */
+@font-face {
+  font-family: 'Geist';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/Geist-Variable.woff2') format('woff2-variations');
+}
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('/fonts/GeistMono-Variable.woff2') format('woff2-variations');
+}
+/* ==========================================================================
+   Theme tokens
+   ========================================================================== */
+:root {
+  /* Single typeface across the whole UI — regular Geist (sans + mono).
+     `--font-pixel` aliases to Geist for legacy accent rules. */
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-pixel: 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --rail-w: 56px;
+  --tb-h: 56px;
+  --radius: 8px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast: 140ms;
+  --dur: 220ms;
+  --dur-slow: 320ms;
+  /* Lets `height: auto` transition (Chrome 129+); no-ops in older browsers. */
+  interpolate-size: allow-keywords;
+
+  /* Category accents (for picker icons, hover states) */
+  --apple: #b5b5b8;       /* titanium */
+  --android: #34a853;     /* google green */
+  --tablet: #007aff;
+  --laptop: #ff9500;
+
+  /* Realistic device bezel palette */
+  --bezel-edge:  #4a4d52;      /* metallic edge highlight */
+  --bezel-mid:   #2a2c30;      /* mid-tone */
+  --bezel-deep:  #14161a;      /* deep shadow */
+  --bezel-button:#3a3d42;
+}
+body[data-theme='dark'] {
+  --bg: #0a0a0a;
+  --bg-elev: #161616;
+  --bg-elev-2: #1f1f1f;
+  --border: #2a2a2a;
+  --border-strong: #3a3a3a;
+  --fg: #ededed;
+  --fg-muted: #8a8a8a;
+  --accent: #0070f3;
+  --accent-fg: #fff;
+  --canvas-grid: #181818;
+  --canvas-bg: #0a0a0a;
+  --bezel-fg: #ededed;
+  --bezel-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
+                  0 8px 24px rgba(0, 0, 0, 0.5);
+}
+body[data-theme='light'] {
+  --bg: #f3f3f3;
+  --bg-elev: #fff;
+  --bg-elev-2: #f0f0f0;
+  --border: #e5e5e5;
+  --border-strong: #d4d4d4;
+  --fg: #0a0a0a;
+  --fg-muted: #6b6b6b;
+  --accent: #0070f3;
+  --accent-fg: #fff;
+  --canvas-grid: #e2e2e2;
+  --canvas-bg: #f3f3f3;
+  --bezel-fg: #0a0a0a;
+  --bezel-shadow: 0 30px 80px rgba(0, 0, 0, 0.18),
+                  0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ==========================================================================
+   Reset + scrollbar hiding + global view-transition tweaks
+   ========================================================================== */
+*, *::before, *::after { box-sizing: border-box; }
+html, body, #app { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+*::-webkit-scrollbar { width: 0; height: 0; display: none; }
+* { scrollbar-width: none; -ms-overflow-style: none; }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease),
+              color var(--dur-fast) var(--ease),
+              border-color var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease);
+}
+button:disabled { cursor: not-allowed; opacity: 0.4; }
+input { font: inherit; color: inherit; }
+input::placeholder { color: var(--fg-muted); opacity: 0.85; }
+
+/* ==========================================================================
+   Shell
+   ========================================================================== */
+.shell {
+  display: grid;
+  grid-template-rows: var(--tb-h) 1fr;
+  height: 100vh;
+}
+.shell__body {
+  display: grid;
+  grid-template-columns: 1fr var(--rail-w);
+  min-height: 0;
+}
+
+/* ==========================================================================
+   Toolbar
+   ========================================================================== */
+.tb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elev);
+}
+.tb__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-pixel);
+  font-size: 16px;
+  letter-spacing: 0.06em;
+  padding-right: 12px;
+  border-right: 1px solid var(--border);
+  margin-right: 4px;
+}
+.tb__brand span { display: inline-flex; color: var(--fg); }
+.tb__url-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  height: 36px;
+  padding-left: 10px;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+.tb__url-wrap:focus-within { border-color: var(--fg); }
+.tb__url-icon { display: inline-flex; color: var(--fg-muted); margin-right: 6px; }
+.tb__url {
+  flex: 1;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  padding: 0 8px;
+  height: 100%;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+.tb__go {
+  height: 100%;
+  padding: 0 14px;
+  background: var(--fg);
+  color: var(--bg);
+  font-weight: 500;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+.tb__go:hover { opacity: 0.85; }
+.tb__info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px;
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  height: 36px;
+}
+.tb__zoom-label { color: var(--fg); }
+.tb__icon {
+  width: 36px;
+  height: 36px;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--fg-muted);
+}
+.tb__icon:hover { color: var(--fg); border-color: var(--border-strong); }
+
+/* ==========================================================================
+   Canvas
+   ========================================================================== */
+.canvas {
+  position: relative;
+  background:
+    radial-gradient(circle at 1px 1px, var(--canvas-grid) 1px, transparent 1.5px) 0 0/24px 24px,
+    var(--canvas-bg);
+  overflow: hidden;
+  contain: strict;
+}
+/* Pan-mode cursors. */
+.canvas[data-pan='grab']     { cursor: grab; }
+.canvas[data-pan='grabbing'] { cursor: grabbing; user-select: none; }
+.canvas[data-pan='grab'] iframe,
+.canvas[data-pan='grabbing'] iframe { pointer-events: none; }
+.canvas__viewport {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  /* The stage is positioned via `transform: translate + scale`. Pan is a
+     manual translate update, zoom is anchored to the cursor — see
+     canvas.ts. We don't use overflow scrolling because CSS-transformed
+     elements don't update scrollable bounds, which breaks zoom-to-cursor
+     math. */
+}
+.canvas__stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* Top-left origin makes translate values map directly to viewport pixels. */
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+/* ==========================================================================
+   Frames — bundled SVG bezels (public/bezels/)
+   ==========================================================================
+   The frame container is sized to the bezel's outer rect. The bezel <img>
+   draws the artwork (colored via `currentColor` so SVGs pick up the theme).
+   The iframe is absolutely positioned over the screen cutout.
+*/
+.frame {
+  position: relative;
+  color: var(--bezel-fg);
+  filter: drop-shadow(0 24px 48px rgba(0, 0, 0, 0.45))
+          drop-shadow(0 6px 14px rgba(0, 0, 0, 0.3));
+  animation: frame-in 320ms var(--ease);
+  view-transition-name: active-frame;
+}
+.frame__bezel {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+}
+.frame > iframe {
+  display: block;
+  border: 0;
+  background: #fff;
+  color-scheme: light;
+  z-index: 2;
+  /* iframe.style sets position/left/top/width/height/border-radius. */
+  overflow: hidden;
+}
+@keyframes frame-in {
+  from { opacity: 0; transform: scale(0.985); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ==========================================================================
+   Browser chrome overlay — iOS Safari / Android Chrome / Desktop
+   ========================================================================== */
+.frame__chrome-host {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+}
+.frame__chrome-host--bottom { display: flex; flex-direction: column; }
+.chrome {
+  display: flex;
+  align-items: center;
+  font-family: -apple-system, system-ui, 'Geist', sans-serif;
+  color: rgba(255, 255, 255, 0.92);
+  height: 100%;
+  width: 100%;
+  pointer-events: auto;
+  user-select: none;
+}
+.chrome__btn {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  color: rgba(255, 255, 255, 0.9);
+  background: transparent;
+  border: 0;
+  flex: 0 0 auto;
+}
+.chrome__url {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: rgba(60, 60, 67, 0.6);
+  border-radius: 10px;
+  height: 36px;
+  padding: 0 10px;
+  font-size: 13px;
+  position: relative;
+  overflow: hidden;
+}
+.chrome__lock {
+  display: inline-flex;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.7);
+  flex: 0 0 auto;
+}
+.chrome__host { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ----- iOS Safari — top status bar + bottom URL/toolbar ---------------- */
+.chrome--ios-status {
+  background: #000;
+  color: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 22px;
+  height: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+.chrome--ios-status .chrome__time {
+  font-size: 13px;
+  font-weight: 600;
+  font-family: -apple-system, system-ui, 'Geist', sans-serif;
+}
+.chrome--ios-status .chrome__statusicons {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.chrome--ios-bottom {
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  height: 100%;
+  padding: 8px 14px 0;
+}
+.chrome--ios-bottom .chrome__urlbar {
+  display: flex;
+  align-items: center;
+  background: rgba(118, 118, 128, 0.30);
+  border-radius: 13px;
+  height: 46px;
+  padding: 0 6px;
+  font-family: -apple-system, system-ui, 'Geist', sans-serif;
+}
+.chrome--ios-bottom .chrome__aa {
+  flex: 0 0 auto;
+  width: 38px;
+  display: inline-grid;
+  place-items: center;
+  font-weight: 500;
+  font-size: 16px;
+  letter-spacing: -0.02em;
+  color: rgba(255, 255, 255, 0.92);
+}
+.chrome--ios-bottom .chrome__aa::first-letter { font-size: 18px; }
+.chrome--ios-bottom .chrome__url-inner {
+  flex: 1;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  line-height: 1.1;
+  color: rgba(255, 255, 255, 0.96);
+  overflow: hidden;
+  min-width: 0;
+}
+.chrome--ios-bottom .chrome__url-inner .chrome__host {
+  font-size: 13px;
+  max-width: 100%;
+}
+.chrome--ios-bottom .chrome__lock {
+  display: inline-flex;
+  align-items: center;
+  margin-bottom: 1px;
+  color: rgba(255, 255, 255, 0.85);
+}
+.chrome--ios-bottom .chrome__lock svg { width: 9px; height: 9px; }
+.chrome--ios-bottom .chrome__btn--reload {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  color: rgba(255, 255, 255, 0.92);
+}
+.chrome--ios-bottom .chrome__btn--reload svg { width: 16px; height: 16px; }
+.chrome--ios-bottom .chrome__toolbar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 6px;
+  margin-top: 2px;
+  color: rgba(255, 255, 255, 0.96);
+}
+.chrome--ios-bottom .chrome__btn {
+  width: 44px;
+  height: 40px;
+  color: rgba(255, 255, 255, 0.96);
+}
+.chrome--ios-bottom .chrome__btn svg { width: 22px; height: 22px; stroke-width: 1.6; }
+.chrome--ios-bottom .chrome__btn--back svg,
+.chrome--ios-bottom .chrome__btn--forward svg { width: 20px; height: 20px; stroke-width: 1.8; }
+.chrome__home-indicator {
+  flex: 0 0 auto;
+  width: 34%;
+  height: 5px;
+  margin: 4px auto 7px;
+  background: #fff;
+  border-radius: 3px;
+}
+
+/* ----- Android Chrome ------------------------------------------------- */
+.chrome--android {
+  background: #000;
+  color: rgba(255, 255, 255, 0.92);
+  flex-direction: column;
+  padding: 0;
+}
+.chrome__statusbar {
+  height: 24px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.chrome__time { font-size: 11px; }
+.chrome__statusicons {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+}
+.chrome__battery { font-size: 10px; }
+.chrome__urlbar {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 6px;
+  background: #1c1c1e;
+}
+.chrome__urlbar .chrome__btn { color: rgba(255, 255, 255, 0.85); }
+.chrome__urlbar .chrome__url {
+  background: #2c2c2e;
+  border-radius: 18px;
+  height: 32px;
+  font-size: 12px;
+  justify-content: flex-start;
+}
+.chrome__tabcount {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+/* ----- Desktop browser (macOS Safari) ---------------------------------- */
+.chrome--desktop {
+  background: #363435;
+  display: flex;
+  align-items: center;
+  height: 52px;
+  padding: 0 16px;
+  gap: 14px;
+  color: #B6B4B5;
+}
+.chrome__lights { display: inline-flex; align-items: center; gap: 8px; }
+.chrome__light { width: 12px; height: 12px; border-radius: 50%; }
+.chrome__light--close { background: #E8695E; }
+.chrome__light--min   { background: #F1BE4F; }
+.chrome__light--max   { background: #61C554; }
+.chrome--desktop .chrome__nav {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.chrome--desktop .chrome__divider {
+  display: inline-block;
+  width: 1px;
+  height: 20px;
+  background: #5A5859;
+  margin: 0 4px;
+}
+.chrome--desktop .chrome__btn {
+  width: 28px;
+  height: 28px;
+  color: #B6B4B5;
+}
+.chrome--desktop .chrome__btn--back,
+.chrome--desktop .chrome__btn--forward {
+  color: #5A5859;
+}
+.chrome--desktop .chrome__urlfield {
+  flex: 1;
+  max-width: 600px;
+  margin: 0 auto;
+  height: 32px;
+  border: 1px solid #5A5859;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #fff;
+  font-family: -apple-system, system-ui, 'Geist', sans-serif;
+}
+.chrome--desktop .chrome__lock { color: #fff; display: inline-flex; }
+.chrome--desktop .chrome__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   Right rail
+   ========================================================================== */
+.rail {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 8px;
+  border-left: 1px solid var(--border);
+  background: var(--bg-elev);
+}
+.rail__btn {
+  width: 40px;
+  height: 40px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: var(--radius);
+  color: var(--fg-muted);
+  position: relative;
+}
+.rail__btn:hover:not(:disabled) {
+  color: var(--fg);
+  background: var(--bg-elev-2);
+}
+.rail__btn:active:not(:disabled) { transform: scale(0.94); }
+.rail__btn[data-active='yes'] {
+  color: var(--fg);
+  background: var(--bg-elev-2);
+  box-shadow: inset 0 0 0 1px var(--border-strong);
+}
+.rail__spacer { flex: 1; }
+.rail__badge {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  background: #34c759;
+  color: #fff;
+  font-family: var(--font-pixel);
+  font-size: 8px;
+  padding: 1px 4px;
+  border-radius: 3px;
+  line-height: 1;
+  letter-spacing: 0.08em;
+}
+
+/* ==========================================================================
+   Tooltip
+   ========================================================================== */
+.tooltip {
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 12px;
+  white-space: nowrap;
+  z-index: 9999;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  animation: tooltip-in 140ms var(--ease);
+}
+@keyframes tooltip-in {
+  from { opacity: 0; transform: translateX(4px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ==========================================================================
+   Device picker dialog — animated open/close
+   ========================================================================== */
+.dp {
+  width: min(820px, 92vw);
+  max-height: 86vh;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--bg-elev);
+  color: var(--fg);
+  padding: 0;
+  overflow: hidden;
+  font-family: var(--font-sans);
+
+  /* MDN dialog-animation pattern:
+       - Base styles describe the *closed* state (so close transitions out).
+       - .dp[open] is the *visible* state.
+       - @starting-style on [open] is the entry-state, applied for the
+         very first paint when [open] flips on (so the transition has a
+         "from" value to interpolate from). */
+  opacity: 0;
+  transform: translateY(8px) scale(0.97);
+  transition:
+    opacity 220ms var(--ease-out),
+    transform 220ms var(--ease-out),
+    overlay 220ms allow-discrete,
+    display 220ms allow-discrete;
+}
+.dp[open] {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+@starting-style {
+  .dp[open] { opacity: 0; transform: translateY(8px) scale(0.97); }
+}
+.dp::backdrop {
+  background: rgba(0, 0, 0, 0.50);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  transition:
+    opacity 220ms var(--ease-out),
+    overlay 220ms allow-discrete,
+    display 220ms allow-discrete;
+}
+.dp[open]::backdrop { opacity: 1; }
+@starting-style { .dp[open]::backdrop { opacity: 0; } }
+
+.dp__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.dp__header h2 { margin: 0; font-size: 16px; font-weight: 600; }
+.dp__close { font-size: 24px; line-height: 1; color: var(--fg-muted); padding: 0 8px; }
+.dp__close:hover { color: var(--fg); }
+.dp__tabs {
+  display: flex;
+  gap: 4px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.dp__tab {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--fg-muted);
+  position: relative;
+}
+.dp__tab[data-active='yes'] {
+  background: var(--bg-elev-2);
+  color: var(--fg);
+}
+.dp__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 8px;
+  padding: 16px 20px;
+  /* min-height is sized to fit the largest category (Apple Phones — 14
+     cards in 3 rows on a 5-column grid). Stable across tabs → no CLS. */
+  min-height: 320px;
+  max-height: 60vh;
+  overflow-y: auto;
+  align-content: start;
+  opacity: 1;
+  transition: opacity 160ms var(--ease-out);
+}
+.dp__card {
+  text-align: left;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  position: relative;
+  transition:
+    border-color var(--dur-fast) var(--ease),
+    transform var(--dur-fast) var(--ease),
+    background var(--dur-fast) var(--ease);
+}
+.dp__card:hover {
+  border-color: var(--fg);
+  transform: translateY(-2px);
+}
+.dp__card[data-active='yes'] {
+  border-color: var(--fg);
+  background: var(--bg-elev-2);
+}
+/* ----- Picker mini-mockups: clean line-art, light, with subtle depth ----
+   Reference: thin 1.5px stroke, no fill on bezel, clear empty screen,
+   tiny details (notch, lens, home circle) drawn as shape children. */
+.dp__card-icon {
+  position: relative;
+  background: transparent;
+  border: 1.5px solid var(--fg-muted);
+  border-radius: 5px;
+  flex: 0 0 auto;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+.dp__card:hover .dp__card-icon { border-color: var(--fg); }
+.dp__card[data-active='yes'] .dp__card-icon { border-color: var(--fg); }
+
+/* Phones — narrow rectangles with rounded corners */
+.dp__card-icon[data-bezel='phone-island'],
+.dp__card-icon[data-bezel='phone-notch'],
+.dp__card-icon[data-bezel='phone-classic'] {
+  width: 22px; height: 32px; border-radius: 5px;
+}
+.dp__card-icon[data-bezel='phone-island']::before {
+  content: ''; position: absolute; top: 2px; left: 50%;
+  transform: translateX(-50%); width: 9px; height: 3px;
+  background: currentColor; opacity: 0.7; border-radius: 2px;
+  color: var(--fg-muted);
+}
+.dp__card-icon[data-bezel='phone-notch']::before {
+  content: ''; position: absolute; top: 1px; left: 50%;
+  transform: translateX(-50%); width: 12px; height: 4px;
+  background: currentColor; opacity: 0.7;
+  border-bottom-left-radius: 3px; border-bottom-right-radius: 3px;
+  color: var(--fg-muted);
+}
+.dp__card-icon[data-bezel='phone-classic']::before {
+  content: ''; position: absolute; top: 3px; left: 50%;
+  transform: translateX(-50%); width: 2.5px; height: 2.5px;
+  background: currentColor; opacity: 0.7; border-radius: 50%;
+  color: var(--fg-muted);
+}
+.dp__card-icon[data-bezel='phone-home'] {
+  width: 22px; height: 34px; border-radius: 4px;
+}
+.dp__card-icon[data-bezel='phone-home']::before {
+  content: ''; position: absolute; top: 3px; left: 50%;
+  transform: translateX(-50%); width: 8px; height: 1.5px;
+  background: currentColor; opacity: 0.6; border-radius: 1px;
+  color: var(--fg-muted);
+}
+.dp__card-icon[data-bezel='phone-home']::after {
+  content: ''; position: absolute; bottom: 1.5px; left: 50%;
+  transform: translateX(-50%); width: 6px; height: 6px;
+  border: 1px solid currentColor; border-radius: 50%;
+  color: var(--fg-muted);
+}
+
+/* Tablets — wider, less rounded */
+.dp__card-icon[data-bezel='tablet'] {
+  width: 28px; height: 36px; border-radius: 3px;
+}
+.dp__card-icon[data-bezel='tablet']::before {
+  content: ''; position: absolute; top: 2px; left: 50%;
+  transform: translateX(-50%); width: 2px; height: 2px;
+  background: currentColor; opacity: 0.6; border-radius: 50%;
+  color: var(--fg-muted);
+}
+
+/* Laptops — landscape bezel + visible base hump */
+.dp__card-icon[data-bezel='laptop'] {
+  width: 40px; height: 26px; border-radius: 2px 2px 0 0;
+  border-bottom: none;
+  margin-bottom: 4px;
+}
+.dp__card-icon[data-bezel='laptop']::before {
+  /* base */
+  content: ''; position: absolute; bottom: -4px; left: -6px; right: -6px;
+  height: 2.5px; background: currentColor; opacity: 0.6;
+  border-radius: 0 0 4px 4px; color: var(--fg-muted);
+}
+.dp__card-icon[data-bezel='laptop']::after {
+  /* notch */
+  content: ''; position: absolute; top: 1.5px; left: 50%;
+  transform: translateX(-50%); width: 1.5px; height: 1.5px;
+  background: currentColor; opacity: 0.5; border-radius: 50%;
+  color: var(--fg-muted);
+}
+
+/* Monitor / desktop — flat with stand */
+.dp__card-icon[data-bezel='monitor'] {
+  width: 40px; height: 24px; border-radius: 2px;
+  margin-bottom: 4px;
+}
+.dp__card-icon[data-bezel='monitor']::after {
+  content: ''; position: absolute; bottom: -6px; left: 50%;
+  transform: translateX(-50%); width: 30%; height: 5px;
+  border-left: 1.5px solid currentColor;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  border-radius: 0 0 2px 2px;
+  color: var(--fg-muted);
+}
+
+/* All active tabs use the foreground colour — keeps the design monochrome. */
+
+.dp__card-name { font-size: 12px; font-weight: 500; }
+.dp__card-dim {
+  font-family: var(--font-pixel);
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  color: var(--fg-muted);
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   Settings dialog (reuses .dp base, extends with rows)
+   ========================================================================== */
+.st__body {
+  padding: 4px 0 16px;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+.st__section { padding: 8px 20px; }
+.st__heading {
+  margin: 12px 0 8px;
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  font-weight: 600;
+}
+.st__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+.st__row:hover { border-color: var(--border-strong); }
+.st__label { font-size: 13px; }
+.st__toggle {
+  appearance: none;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--border-strong);
+  position: relative;
+  cursor: pointer;
+  transition: background var(--dur-fast) var(--ease);
+}
+.st__toggle::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform var(--dur-fast) var(--ease);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.st__toggle:checked { background: var(--fg); }
+.st__toggle:checked::before { transform: translateX(16px); background: var(--bg-elev); }
+.st__select {
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-family: var(--font-sans);
+  cursor: pointer;
+}
+.st__danger {
+  background: transparent;
+  color: #ff5555;
+  border: 1px solid #ff555555;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+}
+.st__danger:hover { background: rgba(255, 85, 85, 0.08); }
+
+/* ==========================================================================
+   Help dialog
+   ========================================================================== */
+.hp { width: min(560px, 92vw); }
+.hp__title { display: flex; align-items: center; gap: 12px; }
+.hp__title-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--fg);
+  color: var(--bg);
+}
+.hp__body { padding: 8px 0 16px; max-height: 70vh; overflow-y: auto; }
+.hp__section { padding: 8px 20px; }
+.hp__section + .hp__section { border-top: 1px solid var(--border); margin-top: 8px; padding-top: 16px; }
+.hp__faq {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  margin-bottom: 6px;
+  overflow: hidden;
+  transition: border-color var(--dur-fast) var(--ease);
+}
+.hp__faq:hover { border-color: var(--fg-muted); }
+.hp__faq[open] { border-color: var(--fg); }
+.hp__faq-q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.hp__faq-q::-webkit-details-marker { display: none; }
+.hp__faq-chevron {
+  color: var(--fg-muted);
+  font-size: 18px;
+  font-weight: 300;
+  width: 20px;
+  height: 20px;
+  display: inline-grid;
+  place-items: center;
+  transition: transform 280ms var(--ease-out), color 280ms var(--ease-out);
+}
+.hp__faq[open] .hp__faq-chevron { transform: rotate(45deg); color: var(--fg); }
+.hp__faq-a {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--fg-muted);
+}
+
+/* Smooth accordion: animate the ::details-content slot.
+   Requires Chrome 131+ for ::details-content and
+   `interpolate-size: allow-keywords` (declared on :root) to allow
+   `height: auto` to participate in transitions. Falls back to instant
+   open/close on older engines. */
+.hp__faq::details-content {
+  opacity: 0;
+  height: 0;
+  padding: 0 14px;
+  overflow: clip;
+  transition:
+    height 320ms var(--ease-out),
+    opacity 220ms ease-out,
+    padding 320ms var(--ease-out),
+    content-visibility 320ms allow-discrete;
+}
+.hp__faq[open]::details-content {
+  opacity: 1;
+  height: auto;
+  padding: 0 14px 14px;
+}
+.hp__link {
+  display: inline-block;
+  margin: 8px 12px 0;
+  color: var(--fg-muted);
+  font-size: 12px;
+  text-decoration: none;
+}
+.hp__link:hover { color: var(--fg); text-decoration: underline; }
+.hp__row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  text-decoration: none;
+  color: var(--fg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 6px;
+  background: var(--bg);
+  transition: border-color var(--dur-fast) var(--ease),
+              transform var(--dur-fast) var(--ease);
+}
+.hp__row:hover { border-color: var(--fg); transform: translateY(-1px); }
+.hp__row-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--bg-elev-2);
+  color: var(--fg-muted);
+  flex: 0 0 auto;
+}
+.hp__row-text { flex: 1; }
+.hp__row-title { font-size: 13px; font-weight: 500; }
+.hp__row-desc { font-size: 11px; color: var(--fg-muted); margin-top: 2px; }
+.hp__row-arrow { color: var(--fg-muted); font-size: 16px; }
+
+/* ==========================================================================
+   Canvas background variants (driven by body[data-canvas-bg])
+   ========================================================================== */
+body[data-canvas-bg='dots'] .canvas {
+  background:
+    radial-gradient(circle at 1px 1px, var(--canvas-grid) 1px, transparent 1.5px) 0 0/24px 24px,
+    var(--canvas-bg);
+}
+body[data-canvas-bg='grid'] .canvas {
+  background:
+    linear-gradient(var(--canvas-grid) 1px, transparent 1px) 0 0/24px 24px,
+    linear-gradient(90deg, var(--canvas-grid) 1px, transparent 1px) 0 0/24px 24px,
+    var(--canvas-bg);
+}
+body[data-canvas-bg='solid'] .canvas {
+  background: var(--canvas-bg);
+}
+body[data-canvas-bg='lines'] .canvas {
+  background:
+    repeating-linear-gradient(
+      45deg,
+      var(--canvas-grid) 0 1px,
+      transparent 1px 14px
+    ),
+    var(--canvas-bg);
+}
+body[data-canvas-bg='plus'] .canvas {
+  background:
+    linear-gradient(var(--canvas-grid) 1px, transparent 1px) 12px 12px/24px 24px,
+    linear-gradient(90deg, var(--canvas-grid) 1px, transparent 1px) 12px 12px/24px 24px,
+    var(--canvas-bg);
+  background-clip: content-box, content-box, padding-box;
+}
+body[data-canvas-bg='blueprint'][data-theme='dark'] .canvas {
+  background:
+    linear-gradient(rgba(106, 173, 246, 0.18) 1px, transparent 1px) 0 0/24px 24px,
+    linear-gradient(90deg, rgba(106, 173, 246, 0.18) 1px, transparent 1px) 0 0/24px 24px,
+    #0c2748;
+}
+body[data-canvas-bg='blueprint'][data-theme='light'] .canvas {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.55) 1px, transparent 1px) 0 0/24px 24px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.55) 1px, transparent 1px) 0 0/24px 24px,
+    #2566c5;
+}
+body[data-canvas-bg='gradient'][data-theme='dark'] .canvas {
+  background: radial-gradient(
+    ellipse at top,
+    #1a1c22 0%,
+    var(--canvas-bg) 70%
+  );
+}
+body[data-canvas-bg='gradient'][data-theme='light'] .canvas {
+  background: radial-gradient(
+    ellipse at top,
+    #ffffff 0%,
+    var(--canvas-bg) 70%
+  );
+}
+
+/* ==========================================================================
+   Breakpoint guides — vertical lines at CSS breakpoints (640/768/1024/1280),
+   anchored to the FRAME so they pan and zoom with the device. The frame
+   sits inside `.canvas__stage` which holds the pan/zoom transform; lines
+   are positioned in CSS px from the frame's left edge.
+
+   Each guide is hidden when the device viewport is narrower than its
+   breakpoint — no point showing a 1280-px line on a 393-px iPhone.
+   ========================================================================== */
+.frame__guides {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  display: none;
+}
+body[data-show-guides='yes'] .frame__guides { display: block; }
+.frame__guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--guide-color, rgba(125, 211, 252, 0.55));
+}
+.frame__guide[data-bp='640']  { background: rgba(125, 211, 252, 0.55); }
+.frame__guide[data-bp='768']  { background: rgba(110, 231, 183, 0.55); }
+.frame__guide[data-bp='1024'] { background: rgba(255, 196, 89, 0.55); }
+.frame__guide[data-bp='1280'] { background: rgba(255, 122, 89, 0.55); }
+.frame__guide-label {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  padding: 2px 4px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+/* ==========================================================================
+   Picker — recent chips + custom-device tab
+   ========================================================================== */
+.dp__recents {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 24px 8px;
+  flex-wrap: wrap;
+  min-height: 32px;
+}
+.dp__recents:empty { display: none; }
+.dp__recents-label {
+  font-family: var(--font-pixel);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-right: 4px;
+}
+.dp__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 10px;
+  border-radius: 13px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  font-size: 11px;
+}
+.dp__chip:hover { border-color: var(--border-strong); }
+.dp__chip[data-active='yes'] {
+  border-color: var(--fg);
+  background: var(--fg);
+  color: var(--bg);
+}
+.dp__chip-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--fg-muted);
+}
+.dp__chip[data-active='yes'] .dp__chip-dot { background: var(--bg); }
+
+.dp__cd-form {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--bg-elev-2);
+  margin-bottom: 4px;
+}
+.dp__cd-title {
+  font-family: var(--font-pixel);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.dp__cd-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.dp__cd-input {
+  height: 32px;
+  padding: 0 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  flex: 1;
+  outline: none;
+  min-width: 0;
+}
+.dp__cd-input:focus { border-color: var(--fg); }
+.dp__cd-input--num { flex: 0 0 80px; }
+.dp__cd-x { color: var(--fg-muted); font-family: var(--font-mono); }
+.dp__cd-add {
+  height: 32px;
+  padding: 0 14px;
+  border-radius: var(--radius);
+  background: var(--fg);
+  color: var(--bg);
+  font-weight: 500;
+  font-size: 12px;
+}
+.dp__cd-add:hover { opacity: 0.85; }
+
+.dp__card--custom {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  padding: 0;
+}
+.dp__card--custom .dp__card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px;
+  background: transparent;
+  color: inherit;
+  border: 0;
+  width: 100%;
+}
+.dp__card-remove {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--fg-muted);
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+.dp__card--custom:hover .dp__card-remove { opacity: 1; }
+.dp__card-remove:hover { background: var(--bg-elev-2); color: var(--fg); }
+
+/* Bezel visibility is now controlled inline by frame.ts → applyBezelVisible
+   so the iframe collapses fully (no padded dead space). */
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
