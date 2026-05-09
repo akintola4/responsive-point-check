@@ -1,0 +1,9 @@
+node_modules/
+.output/
+.wxt/
+*.log
+.DS_Store
+
+# Geist fonts are copied at install time (postinstall script)
+public/fonts/
+screenshots/
