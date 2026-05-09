@@ -4,6 +4,11 @@ node_modules/
 *.log
 .DS_Store
 
+# Local Claude Code workspace settings
+.claude/
+
 # Geist fonts are copied at install time (postinstall script)
 public/fonts/
+
+# Screenshot output from `pnpm screenshot`
 screenshots/
