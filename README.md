@@ -1,5 +1,7 @@
 # RPC — Responsive Point Check
 
+![RPC — preview any URL across realistic device viewports](./og.png)
+
 > A Chrome extension for previewing any URL across realistic device viewports — without leaving the browser. Built in vanilla TypeScript on top of WXT, with bundled SVG bezels, a transform-based pan/zoom canvas, and full-page scroll-and-stitch screenshots.
 
 The "RPC" lives on the toolbar. The whole thing is one panel page.
